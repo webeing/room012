@@ -1,0 +1,14 @@
+#media-items {
+    /*display: none!important;*/
+}
+.page-id-12 iframe .post_title,
+.page-id-12 iframe .image_alt,
+.page-id-12 iframe .post_excerpt,
+.page-id-12 iframe .url,
+.page-id-12 iframe .align,
+.page-id-12 iframe .image-size,
+.page-id-12 iframe .media-item-info .button,
+.page-id-12 iframe .post_content,
+.page-id-12 iframe .savebutton{
+    display: none!important;
+}
