@@ -10,15 +10,18 @@
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title><?php
-	global $page, $paged;
+	global $page, $paged, $wp_query;
 
 	wp_title( '|', true, 'right' );
 	bloginfo( 'name' );
 
 	$site_description = get_bloginfo( 'description', 'display' );
-	if ( $site_description && ( is_home() || is_front_page() ) )
+	if ( $site_description && ( is_home() || is_front_page()))
+        if($wp_query->query_vars['action'] == "nuovo" ){
+        echo " | Nuovo Progetto";
+        } else {
 		echo " | $site_description";
-
+        }
 	if ( $paged >= 2 || $page >= 2 )
 		echo ' | ' . sprintf( __( 'Page %s', 'wpbootstrap' ), max( $paged, $page ) );
 
@@ -137,20 +140,27 @@ jQuery(function(){
 	 		</h1>
  		</div><!--/#brand-->
 	 	<div class="nav-collapse span8">
+            <form class="navbar-search right" id="searchform" method="get" action="<?php bloginfo('siteurl'); ?>">
+             <input type="text" name="s" id="s" class="search-query" placeholder="<?php _e('Search'); ?>" />
+            </form>
+            <a id="fb-link" class="left" href="https://www.facebook.com/room012" title="" target="_blank">
+             <img src="<?php bloginfo('template_url'); ?>/images/facebook-menu-top.png" alt="Segui ROOM 012 su facebook" />
+            </a>
+            <br class="clear"/>
+
 	 	<?php wp_nav_menu(); ?>
 
-	 	<form class="navbar-search pull-left span2" id="searchform" method="get" action="<?php bloginfo('siteurl'); ?>">
-	 	      <input type="text" name="s" id="s" class="search-query" placeholder="<?php _e('Search'); ?>" />
-	 	</form>
-	 	<a id="fb-link" class="right" href="https://www.facebook.com/room012" title="" target="_blank">
-	 		<img src="<?php bloginfo('template_url'); ?>/images/facebook-menu-top.png" alt="Segui ROOM 012 su facebook" />
-	 	</a>
+
 	 	<br class="clear"/>
-	 	<?php if (is_home()||is_front_page()){ ?>
+	 	<?php if (is_home()||is_front_page()){
+            if($wp_query->query_vars['action'] == "nuovo" ){
+
+            } else {?>
 		 	<div id="claim-header" class="clear">
 		 		<h3><?php bloginfo('description'); ?></h3>
 		 	</div>
-	 	<?php } ?>
+	 	<?php }
+        } ?>
 	 	</div><!--/.nav-collapse-->
 
  	</div>
@@ -164,7 +174,7 @@ jQuery(function(){
 </style>
 <?php endif; ?>
     
-<div class="<?php echo (get_option('wp_room012_fluid') == 0) ? 'container' : 'container-fluid'; ?>">
+<div class="content <?php echo (get_option('wp_room012_fluid') == 0) ? 'container' : 'container-fluid'; ?>">
     
  <?php if(get_option('wp_room012_show_top_bar') == 0): ?>
   <div class="<?php echo (get_option('wp_room012_fluid') == 0) ? 'row' : 'row-fluid'; ?>">
@@ -194,38 +204,43 @@ jQuery(function(){
         })  
       </script>
 
-      <div class="span3">
-          <h2><a class="brand" href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h2>
-      </div>
-        <div class="span9 nav-menu">
+    <div class="span3">
+      <h2><a class="brand" href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h2>
+    </div>
+    <div class="span9 nav-menu">
         <div class="nav-collapse">
             <?php wp_nav_menu(); ?>
         </div>
-        </div>
+    </div>
   </div>
     <?php endif; ?>
-    <?php if (!is_home() || !is_front_page()){ ?>
+    <?php
+    if (!(is_home() || is_front_page()|| is_singular('progetto'))){?>
     <div class="breadcrumbs">
-        <?php if(function_exists('bcn_display'))
-        {
-            bcn_display();
-        }?>
+         <?php
+
+             if(function_exists('bcn_display'))
+                    {
+                        bcn_display();
+                    }
+         ?>
     </div>
-    <?php } ?>
+                <?php
+    } ?>
     <?php /* ?>
     <div class="<?php echo (get_option('wp_room012_fluid') == 0) ? 'row' : 'row-fluid'; ?>">
-	    <div class="span12 img_header">
-	         <?php
-	            // Check if this is a post or page, if it has a thumbnail, and if it's a big one
-	            if ( is_singular() && current_theme_supports( 'post-thumbnails' ) &&
-	                            has_post_thumbnail( $post->ID ) &&
-	                            ( $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'post-thumbnail' ) ) &&
-	                            $image[1] >= HEADER_IMAGE_WIDTH ) :
-	                    // Houston, we have a new header image!
-	                    echo get_the_post_thumbnail( $post->ID );
-	            elseif ( get_header_image() ) : ?>
-	                    <img src="<?php header_image(); ?>" alt="" />
-	            <?php endif; ?>
-	    </div>
+        <div class="span12 img_header">
+             <?php
+                // Check if this is a post or page, if it has a thumbnail, and if it's a big one
+                if ( is_singular() && current_theme_supports( 'post-thumbnails' ) &&
+                                has_post_thumbnail( $post->ID ) &&
+                                ( $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'post-thumbnail' ) ) &&
+                                $image[1] >= HEADER_IMAGE_WIDTH ) :
+                        // Houston, we have a new header image!
+                        echo get_the_post_thumbnail( $post->ID );
+                elseif ( get_header_image() ) : ?>
+                        <img src="<?php header_image(); ?>" alt="" />
+                <?php endif; ?>
+        </div>
     </div>
     <?php */ ?>

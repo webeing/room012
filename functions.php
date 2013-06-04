@@ -15,6 +15,23 @@ if ( ! function_exists( 'wp_room012_init' ) ):
      */
     include_once TEMPLATEPATH . "/inc/r012_scheda_professionista_cpt.php";
     /**
+     * CPT azienda
+     */
+    include_once TEMPLATEPATH . "/inc/r012_scheda_azienda.php";
+    /**
+     * CPT operatore
+     */
+    include_once TEMPLATEPATH . "/inc/r012_scheda_operatore.php";
+    /**
+     * CPT operatore
+     */
+    include_once TEMPLATEPATH . "/inc/r012_scheda_rivenditore.php";
+    /**
+     * CPT progetto
+     */
+    include_once TEMPLATEPATH . "/inc/r012_progetto_cpt.php";
+
+    /**
      * CPT slider
      */
     include_once TEMPLATEPATH . "/inc/r012_slider_cpt.php";
@@ -26,14 +43,31 @@ if ( ! function_exists( 'wp_room012_init' ) ):
      * Ajax Transactions
      */
     include_once TEMPLATEPATH . "/inc/r012_registration.php";
+    /**
+     * classe autocomplete
+     */
+    include_once TEMPLATEPATH . "/inc/r012_autocomplete.php";
+    /**
+     * classe gallery
+     */
+    include_once TEMPLATEPATH . "/inc/r012_gallery.php";
+    /**
+     * classe utilities
+     */
+    include_once TEMPLATEPATH . "/inc/r012_utilities.php";
 
-
+     
 
     add_image_size( 'slider-feature', 940, 345, true);
     add_image_size( 'thumb-home-feature', 220, 220, true);
-    add_image_size( 'sk-thumb', 360, 99999, false);
+    add_image_size( 'thumb-single', 300, 300, true);
+    add_image_size( 'thumb-single-gallery', 9999, 9999, true);
+
     add_image_size( 'thumb-prima-notizia-feature', 460, 220, true);
     add_image_size( 'single-thumb', 460, 999999);
+
+    add_image_size( 'aziende-thumb', 285, 285, true);
+    add_image_size( 'preview', 100, 100, true);
 
     function wp_room012_init() 
     {
@@ -223,11 +257,6 @@ function wp_room012_comments($comment, $args, $depth) {
 <hr />
 <?php
 }
-add_action('init','r012_ajax_init');
-function r012_ajax_init(){
-
-
-}
 
 add_action('wp_enqueue_scripts', 'r012_scripts');
 add_action('admin_enqueue_scripts', 'r012_admin_scripts');
@@ -238,12 +267,26 @@ function r012_admin_scripts() {
     wp_enqueue_script('thickbox');
     wp_register_script( 'r012-ajax', get_template_directory_uri() . '/js/r012_ajax.js', array('jquery','media-upload','thickbox'));
     wp_enqueue_script( 'r012-ajax' );
+
+    //wp_deregister_script('jquery-ui-core');
+    wp_register_script( 'jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', array('jquery'));
+    wp_enqueue_script('jquery-ui');
+
 /*
         wp_register_style( 'r012-admin-style', get_template_directory_uri() . '/inc/admin_style.css');
         wp_enqueue_style( 'r012-admin-style' );
 */
-    wp_localize_script( 'r012-ajax', 'r012_ajax_data', array(
+   wp_localize_script( 'r012-ajax', 'r012_ajax_data', array(
         'adminurl' => admin_url()
+        //'nonce' => wp_create_nonce('r012_professionisti_nonce')
+
+    ));
+
+    wp_register_script( 'r012-autocomplete', get_template_directory_uri() . '/js/r012_autocomplete.js', array('jquery', 'jquery-ui'),'','true');
+    wp_enqueue_script( 'r012-autocomplete' );
+
+    wp_localize_script( 'r012-autocomplete', 'r012_autocomplete_data', array(
+        'adminurl' => admin_url('admin-ajax.php')
         //'nonce' => wp_create_nonce('r012_professionisti_nonce')
 
     ));
@@ -253,6 +296,18 @@ function r012_scripts() {
     wp_enqueue_script('media-upload');
     wp_enqueue_script('thickbox');
     wp_enqueue_style('thickbox');
+
+    wp_deregister_script('jquery-ui-core');
+    wp_register_script( 'jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', array('jquery'));
+    wp_enqueue_script('jquery-ui');
+
+
+    wp_register_style( 'jquery-ui-style', get_template_directory_uri() . '/inc/jquery-ui.css');
+    wp_enqueue_style( 'jquery-ui-style' );
+
+    //add script for cycle gallery
+    #wp_register_script( 'cycle', get_template_directory_uri() . '/js/cycle.js', array('jquery'));
+    #wp_enqueue_script( 'cycle' );
 
     wp_register_script( 'r012-ajax', get_template_directory_uri() . '/js/r012_ajax.js', array('jquery','media-upload','thickbox'));
     wp_enqueue_script( 'r012-ajax' );
@@ -265,12 +320,22 @@ function r012_scripts() {
     wp_enqueue_script( 'r012-validate-additional-min' );
 
 
+
     wp_localize_script( 'r012-ajax', 'r012_ajax_data', array(
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'template_url' => get_bloginfo('template_url'),
         'url' => get_bloginfo('url'),
 
         //'nonce' => wp_create_nonce('r012_professionisti_nonce')
+    ));
+
+    wp_register_script( 'r012-autocomplete', get_template_directory_uri() . '/js/r012_autocomplete.js', array('jquery', 'jquery-ui'),'','true');
+    wp_enqueue_script( 'r012-autocomplete' );
+
+    wp_localize_script( 'r012-autocomplete', 'r012_autocomplete_data', array(
+        'adminurl' => admin_url('admin-ajax.php')
+        //'nonce' => wp_create_nonce('r012_professionisti_nonce')
+
     ));
 
 }
@@ -364,4 +429,8 @@ function r012_add_analytics(){
 <?php
 }
 add_action('wp_head','r012_add_analytics',999);
+
+
+
+
 ?>

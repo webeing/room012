@@ -2,13 +2,11 @@
 /*
 * Template name: Professionisti
 */
-
-
 get_header();
 
 
 if($_GET['recent']){
-    $rp_term_args = array(
+    $r012_term_args = array(
         'orderby' => 'id',
         'order' => $_GET['recent'],
         'posts_per_page' => 30,
@@ -19,7 +17,7 @@ if($_GET['recent']){
 }
 
 elseif($_GET['alfa']){
-    $rp_term_args = array(
+    $r012_term_args = array(
         'orderby'=> 'meta_value',
         'meta_key' => 'r012_cognome_saved',
         'order' => $_GET['alfa'],
@@ -32,7 +30,7 @@ elseif($_GET['alfa']){
 
 }
 else{
-    $rp_term_args = array(
+    $r012_term_args = array(
 
         'order' => 'DESC',
 
@@ -46,7 +44,7 @@ else{
 $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
 
-query_posts($rp_term_args);
+query_posts($r012_term_args);
 ?>
 
 <div class="filter">
@@ -80,20 +78,20 @@ query_posts($rp_term_args);
 
 
 while ( have_posts() ) : the_post();?>
+    <?php $r012_nome = get_post_meta($post->ID, "r012_nome_saved", true);
+    $r012_cognome = get_post_meta($post->ID, "r012_cognome_saved", true);
+    ?>
     <article class="span2">
         <div class="thumb-min">
             <a href="<?php echo get_permalink($post->ID);?>" title="<?php echo $r012_nome; ?> <?php echo $r012_cognome; ?>">
             <?php if ( has_post_thumbnail()){ 
 	            the_post_thumbnail('thumbnail'); 
 	           }else{ ?>
-            	<img src="<?php bloginfo('template_url') ?>/images/img-default.jpg" alt="<?php $r012_nome = get_post_meta($post->ID, "r012_nome_saved", true);
-            	$r012_cognome = get_post_meta($post->ID, "r012_cognome_saved", true);?>" width="150" height="150" />
+            	<img src="<?php bloginfo('template_url') ?>/images/img-default.jpg" alt="<?php $r012_nome . ' ' . $r012_cognome;?>" width="150" height="150" />
              <?php } ?>
             </a>
             </div>
         <div class="info-user">
-            <?php $r012_nome = get_post_meta($post->ID, "r012_nome_saved", true);
-            $r012_cognome = get_post_meta($post->ID, "r012_cognome_saved", true);?>
             <a href="<?php echo get_permalink($post->ID);?>" title="<?php echo $r012_nome; ?> <?php echo $r012_cognome; ?>">
                 <h3 class="professioni"><?php echo $r012_nome; ?> <?php echo $r012_cognome; ?> </h3></a>
             <span>
@@ -113,6 +111,7 @@ while ( have_posts() ) : the_post();?>
             <g:plusone size="medium" href="<?php the_permalink(); ?>"></g:plusone>
         </nav>
 </section>
+</div>
 <?php
  wp_pagenavi();
 

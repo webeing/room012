@@ -142,9 +142,13 @@ get_header();?>
                 <span><a href="<?php echo get_permalink(R012_ID_PAGE_TERMINI_CONDIZIONI); ?>" target="_blank">Accetta termini e condizioni</a> <small class="red">[*]</small></span>
                 <input name="r012_licenza" id="r012_licenza" class="text" value="" type="checkbox"/>
             </p>
+
             <p class="control-group span9 p-captcha">
+
                 <label>Codice di sicurezza:</label>
-                <?php echo recaptcha_get_html(R012_CAPTCHA_PUBKEY, ""); ?>
+                <?php
+
+                echo recaptcha_get_html(R012_CAPTCHA_PUBKEY, ""); ?>
                 <input id="r012_remote_addr" name="r012_remote_addr" type="hidden" value="<?php echo $_SERVER['REMOTE_ADDR'] ?>"/>
             </p>
 

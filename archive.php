@@ -4,18 +4,19 @@
  * Archive page
  */
 
-get_header(); ?>
+get_header();
+?>
 
 <!--<section class="<?php echo (get_option('wp_room012_fluid') == 0) ? 'row' : 'row-fluid'; ?>">
     <section class="span12">-->
     <section>
         <h1 class="page-title">
 <?php if ( is_day() ) : ?>
-				<?php printf( __( 'Daily Archives: <span>%s</span>', 'wpbootstrap' ), get_the_date() ); ?>
+				<?php printf( __( 'Daily Archives: <span>%s</span>', 'r012' ), get_the_date() ); ?>
 <?php elseif ( is_month() ) : ?>
-				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'wpbootstrap' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'wpbootstrap' ) ) ); ?>
+				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'r012' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'r012' ) ) ); ?>
 <?php elseif ( is_year() ) : ?>
-				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'wpbootstrap' ), get_the_date( _x( 'Y', 'yearly archives date format', 'wpbootstrap' ) ) ); ?>
+				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'r012' ), get_the_date( _x( 'Y', 'yearly archives date format', 'r012' ) ) ); ?>
 <?php else : ?>
 				<?php $r012_term =  wp_get_post_terms($post->ID, 'categorie_professionisti');
                 echo $r012_term[0]->slug; ?>
@@ -27,9 +28,10 @@ get_header(); ?>
         if(have_posts())
         while(have_posts()) : the_post ();
         ?>
-       
+
         <article class="span2">
                 <div class="thumb-min">
+
                     <a href="<?php echo get_permalink($post->ID);?>" title="<?php echo $r012_nome; ?> <?php echo $r012_cognome; ?>">
                     <?php if ( has_post_thumbnail()){ 
         	            the_post_thumbnail('thumbnail'); 
