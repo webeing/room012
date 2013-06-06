@@ -28,12 +28,20 @@ body .container .btn{
 	text-align: right;
 }
 body #searchform{
-	margin-left: 60px;
+	margin-left: 30px;
 }
 body img{
 	height: auto!important;
 }
-
+.center{
+    text-align: center;
+}
+.block{
+    display: block;
+}
+body small{
+    font-size: 85%!important;
+}
 /* CONTAINER */
 .single .content, .page .content, .archive .content{
     background: rgba(255, 255, 255, 0.8);
@@ -53,7 +61,7 @@ body img{
 .square {
 	background: none repeat scroll 0 0 #EFE8E0;
 	height: 390px;
-	margin-left: -125px;
+	margin-left: -135px;
 	position: fixed;
 	top: 0;
 	width: 390px;
@@ -106,7 +114,7 @@ body img{
 	margin: 0!important;
 }
 .menu-main-menu-container{
-    margin-top: 40px;
+    margin-top: 10px;
 }
 #menu-main-menu {
 	margin-left: 15px !important;
@@ -120,7 +128,7 @@ body img{
     height: 40px;
     line-height: 2.5em;
     margin-left: 10px !important;
-    min-width: 115px;
+    min-width: 120px;
 }
 #menu-main-menu li li{
 	margin: 0!important;
@@ -236,8 +244,10 @@ body .dropdown-menu .active > a:hover,
 	float: right;
 	padding: 10px;
 }
-#fb-link{
+#fb-link {
     margin-left: 20px;
+    margin-top: 2px;
+    width: 40px;
 }
 
 /* SLIEDER */
@@ -1285,6 +1295,7 @@ SEZ. ATTIVITA'
 
 .busyness-card {
     padding-bottom: 20px;
+    margin-left:-5px!important;
 }
 
 .title-busyness {

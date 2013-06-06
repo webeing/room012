@@ -345,6 +345,11 @@ global $user_ID;
         </div><!--/Collaborazioni-->
 
         <br class="clear"/>
+
+        <!--service message-->
+        <small class="center alert block">Se nella scheda di progetto mancano delle informazioni utili fallo presente all'amministratore del sistema per provvedere ad aggiungerle.<br>
+            <a href="mailto:info@room012.it" title="Invia una mail all'amministratore">Contatta amministratore del sistema</a></small>
+
         <div class="clearfix clear container-fluid action-btn">
             <input id="progettobtn" name="r012_modifica_progetto" value="<?php _e('Salva Modifiche', 'r012') ;?>" type="button" class="span3 ui-button right"/>
             <input id="deleteprogettobtn" name="r012_elimina_progetto" value="<?php _e('Elimina Progetto', 'r012') ;?>" type="button" class="delete-btn span2 ui-button right"/>

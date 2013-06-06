@@ -139,19 +139,17 @@ jQuery(function(){
 	 			</a>
 	 		</h1>
  		</div><!--/#brand-->
-	 	<div class="nav-collapse span8">
+	 	<div class="nav-collapse span8 clearfix">
+            <?php wp_nav_menu(); ?>
+            <br class="clear"/>
             <form class="navbar-search right" id="searchform" method="get" action="<?php bloginfo('siteurl'); ?>">
              <input type="text" name="s" id="s" class="search-query" placeholder="<?php _e('Search'); ?>" />
             </form>
-            <a id="fb-link" class="left" href="https://www.facebook.com/room012" title="" target="_blank">
-             <img src="<?php bloginfo('template_url'); ?>/images/facebook-menu-top.png" alt="Segui ROOM 012 su facebook" />
+            <a id="fb-link" class="right" href="https://www.facebook.com/room012" title="" target="_blank">
+             <img src="<?php bloginfo('template_url'); ?>/images/icon-facebook.png" alt="Segui ROOM 012 su facebook" />
             </a>
-            <br class="clear"/>
 
-	 	<?php wp_nav_menu(); ?>
-
-
-	 	<br class="clear"/>
+	 	    <br class="clear"/>
 	 	<?php if (is_home()||is_front_page()){
             if($wp_query->query_vars['action'] == "nuovo" ){
 

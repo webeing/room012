@@ -1472,6 +1472,11 @@ class R012Professionista{
                             }
 
                             ?>
+                            <br/>
+                            <!--service message-->
+                            <small class="center alert block">Se nella lista sopra mancano delle attività che ti riguardano fallo presente all'amministratore del sistema per provvedere ad aggiungerle.<br>
+                                <a href="mailto:info@room012.it" title="Invia una mail all'amministratore">Contatta amministratore del sistema</a></small>
+
                         </div>
                     </div>
 
@@ -1488,7 +1493,7 @@ class R012Professionista{
 
 
         <div class="span12">
-            <h4><?php echo __('attività','r012'); ?></h4>
+            <h4 class="title-profile"><?php echo __('attività','r012'); ?></h4>
             <div class="content">
                 <ul class="busyness-card">
                     <li>
