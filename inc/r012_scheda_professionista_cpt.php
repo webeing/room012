@@ -19,8 +19,6 @@ class R012Professionista{
 
     public function R012Professionista(){
 
-
-
         add_action( 'add_meta_boxes', array('R012Professionista','r012_add_custom_box_scheda'));
         add_action( 'add_meta_boxes', array('R012Professionista', 'r012_add_custom_box_social'));
         add_action( 'add_meta_boxes', array('R012Professionista','r012_add_custom_box_collaborazioni'));
@@ -913,32 +911,34 @@ class R012Professionista{
     }
 
     public function r012_create_array_collaboratori($r012_values_collaborazioni, $tassonomia){
+       if($r012_values_collaborazioni){
             foreach ( $r012_values_collaborazioni as $collaboratore ) {
 
-            if(is_numeric($collaboratore)){
-            $terms_attivita_professionista = wp_get_object_terms( $collaboratore, $tassonomia);
+                if(is_numeric($collaboratore)){
+                $terms_attivita_professionista = wp_get_object_terms( $collaboratore, $tassonomia);
 
-                    foreach ( $terms_attivita_professionista as $term ) {
+                        foreach ( $terms_attivita_professionista as $term ) {
 
 
-                        $el['c'] = $term->name;
-                        $el['p'] = $collaboratore;
-                    }
+                            $el['c'] = $term->name;
+                            $el['p'] = $collaboratore;
+                        }
 
+
+                }
+
+                else {
+
+                    $el['c'] = 'altro';
+                    $el['p'] = $collaboratore;
+
+                }
+
+            $a[] = $el;
 
             }
-
-            else {
-
-                $el['c'] = 'altro';
-                $el['p'] = $collaboratore;
-
-            }
-
-        $a[] = $el;
-
-        }
-    return $a;
+                return $a;
+       }
     }
 
     public function r012_load_foto($postid, $user_ID){
@@ -1541,7 +1541,7 @@ class R012Professionista{
                                     <?php
 
                                     $cpt = 'professionisti';
-                                    R012Autocomplete::print_input_autocomplete( $cpt ,'');
+                                    R012Autocomplete::print_input_autocomplete( $cpt ,'Inserisci il nome e il cognome del professionista');
                                     R012Autocomplete::print_result_autocomplete($cpt, $r012_values_collaborazioni);?>
                                 </div>
                             </article>
@@ -1554,7 +1554,7 @@ class R012Professionista{
                                     <?php
 
                                     $cpt = 'aziende';
-                                    R012Autocomplete::print_input_autocomplete( $cpt ,'');
+                                    R012Autocomplete::print_input_autocomplete( $cpt ,'Inserisci il nome azienda');
                                     R012Autocomplete::print_result_autocomplete($cpt, $r012_values_collaborazioni_aziende);?>
                                 </div>
 
@@ -1567,7 +1567,7 @@ class R012Professionista{
                                     <?php
 
                                     $cpt = 'operatori';
-                                    R012Autocomplete::print_input_autocomplete( $cpt ,'');
+                                    R012Autocomplete::print_input_autocomplete( $cpt ,'Inserisci il nome operatore');
                                     R012Autocomplete::print_result_autocomplete($cpt, $r012_values_collaborazioni_operatori);?>
                                 </div>
                             </article>
@@ -1579,7 +1579,7 @@ class R012Professionista{
                                     <?php
 
                                     $cpt = 'rivenditori';
-                                    R012Autocomplete::print_input_autocomplete( $cpt ,'');
+                                    R012Autocomplete::print_input_autocomplete( $cpt ,'Inserisci il nome del rivenditore');
                                     R012Autocomplete::print_result_autocomplete($cpt, $r012_values_collaborazioni_rivenditori);?>
                                 </div>
                             </article>

@@ -4,7 +4,20 @@
  * classe gestione autocomplete
  */
 global $r012_search;
+$r012_autocomplete = new R012Autocomplete();
 class R012Autocomplete {
+
+    function __construct() {
+
+        add_action('admin_enqueue_scripts', array(__CLASS__,'register_scripts') );
+
+        add_action('wp_ajax_r012_autocomplete', array( __CLASS__, 'register_ajax') );
+        add_action('wp_ajax_nopriv_r012_autocomplete', array( __CLASS__, 'register_ajax') );
+        add_action('wp_ajax_r012_add', array( __CLASS__, 'register_new_user') );
+        add_action('wp_ajax_nopriv_r012_add', array( __CLASS__ , 'register_new_user') );
+    }
+
+
     public static function print_input_autocomplete( $post_type , $testo){
 
              echo '<label>' . $testo . '</label>';
@@ -125,10 +138,4 @@ class R012Autocomplete {
 }
 
 
-add_action('admin_enqueue_scripts', array('R012Autocomplete','register_scripts') );
-
-add_action('wp_ajax_r012_autocomplete', array( 'R012Autocomplete', 'register_ajax') );
-add_action('wp_ajax_nopriv_r012_autocomplete', array( 'R012Autocomplete' , 'register_ajax') );
-add_action('wp_ajax_r012_add', array( 'R012Autocomplete', 'register_new_user') );
-add_action('wp_ajax_nopriv_r012_add', array( 'R012Autocomplete' , 'register_new_user') );
 ?>

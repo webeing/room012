@@ -27,15 +27,15 @@ class R012Utility {
 
 
         foreach ($array as $data) {
-               $id = $data['c'];
-                if (isset($results[$id])) {
-                    $results[$id][] = $data;
-                } else {
-                    $results[$id] = array($data);
-                }
+            $id = $data['c'];
+            if (isset($results[$id])) {
+                $results[$id][] = $data;
+            } else {
+                $results[$id] = array($data);
+            }
         }
 
-     return $results;
+        return $results;
     }
 
     //check user logged
@@ -44,55 +44,55 @@ class R012Utility {
 
         $user_id = email_exists(get_post_meta($post,'r012_email_saved',true));
 
-       /* var_dump($user_id);
-        var_dump($user_ID);
-        var_dump(current_user_can('administrator'));*/
+        /* var_dump($user_id);
+         var_dump($user_ID);
+         var_dump(current_user_can('administrator'));*/
         if(($user_ID == $user_id) || current_user_can('administrator')){
-        ?>
+            ?>
 
-                <a id="<?php echo $id_form;?>" title="<?php echo $label; ?>" href=""><?php echo $label; ?></a>
+            <a id="<?php echo $id_form;?>" title="<?php echo $label; ?>" href=""><?php echo $label; ?></a>
 
         <?php }
-     }
+    }
 
 
     public function print_attivita_padre_figlio($terms_attivita_professionista){
 
 
-            foreach ($terms_attivita_professionista as $term_attivita_professionista) {
+        foreach ($terms_attivita_professionista as $term_attivita_professionista) {
 
-                if($term_attivita_professionista->parent==0){
+            if($term_attivita_professionista->parent==0){
 
                 array_push($args_exclude, intval($term_attivita_professionista->term_id));
 
                 echo '<span class="title-busyness">' . strtoupper($term_attivita_professionista->name) .' | </span>';
 
                 $args = array(
-                'child_of'  => $term_attivita_professionista->term_id);
+                    'child_of'  => $term_attivita_professionista->term_id);
 
                 $r012_termini_attivita = get_terms( 'attivita_professionisti', $args );
 
-                    foreach ($terms_attivita_professionista as $term_attivita_professionista) {
+                foreach ($terms_attivita_professionista as $term_attivita_professionista) {
 
-                        foreach($r012_termini_attivita as $r012_termine_attivita){
+                    foreach($r012_termini_attivita as $r012_termine_attivita){
 
-                            if ($r012_termine_attivita->name == $term_attivita_professionista->name){
+                        if ($r012_termine_attivita->name == $term_attivita_professionista->name){
 
                             array_push($args_exclude, intval($r012_termine_attivita->term_id));
 
                             echo '<span>' .strtolower($term_attivita_professionista->name). '</span>';
 
 
-                            }
                         }
                     }
                 }
-
             }
+
+        }
     }
 
     //upload images get id attachment
-    public function r012_upload_image($file, $file_title) {
+    public function r012_upload_image($file, $file_title,$id_post) {
         if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
         if(isset($file) && ($file['size'] > 0)) {
@@ -136,7 +136,7 @@ class R012Utility {
 
 
                     // Run the wp_insert_attachment function. This adds the file to the media library and generates the thumbnails. If you wanted to attch this image to a post, you could pass the post id as a third param and it'd magically happen.
-                    $attach_id = wp_insert_attachment( $attachment, $file_name_and_location );
+                    $attach_id = wp_insert_attachment( $attachment, $file_name_and_location, $id_post );
 
                     require_once(ABSPATH . "wp-admin" . '/includes/image.php');
                     $attach_data = wp_generate_attachment_metadata( $attach_id, $file_name_and_location );
@@ -168,8 +168,9 @@ class R012Utility {
         if ( $_FILES['r012_immagine_modifica_project'] ){
             $file = $_FILES['r012_immagine_modifica_project'];
             $name = $file["name"];
-            $uploaded_id = $this->r012_upload_image($file, $name);
             $r012_postid = (int) $_POST['r012_post'];
+            $uploaded_id = $this->r012_upload_image($file, $name, $r012_postid);
+
 
             if($uploaded_id){
                 set_post_thumbnail($r012_postid , $uploaded_id );
@@ -178,7 +179,7 @@ class R012Utility {
             $path = $image_attributes[0];
             #echo '<img class="r012_thumb_uploaded" src='. $image_attributes[0] .'>';
 
-        $html = <<<HTML
+            $html = <<<HTML
 <html>
     <head>
         <script>
@@ -189,8 +190,8 @@ class R012Utility {
     </body>
 </html>
 HTML;
-        echo $html;
-        die();
+            echo $html;
+            die();
         }
 
         if ( $_FILES['r012_immagine_project'] ){
@@ -219,9 +220,9 @@ HTML;
         if ( $_FILES['r012_immagine_edit_profilo'] ){
             $file = $_FILES['r012_immagine_edit_profilo'];
             $name = $file["name"];
-
-            $uploaded_id = $this->r012_upload_image($file, $name);
             $r012_postid = (int) $_POST['r012_post'];
+            $uploaded_id = $this->r012_upload_image($file, $name, $r012_postid);
+
 
             if($uploaded_id){
                 set_post_thumbnail($r012_postid , $uploaded_id );
@@ -229,9 +230,9 @@ HTML;
             $image_attributes = wp_get_attachment_image_src( $uploaded_id ,'thumb-single');
             $path = $image_attributes[0];
 
-          /*  $R012Professionista = new R012Professionista();
-            $R012Professionista->r012_load_foto($r012_postid,'');
-*/
+            /*  $R012Professionista = new R012Professionista();
+              $R012Professionista->r012_load_foto($r012_postid,'');
+  */
             $html = <<<HTML
 <html>
     <head>

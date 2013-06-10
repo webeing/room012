@@ -253,8 +253,8 @@ global $user_ID;
             if( $array_ids[0] == "" ){ ?>
                 <ul id="image-list">
                         <li class="single-image span6">
-                            <p class="control-group span4 clear">Inserisci immagine <input type="file" name="r012_immagine_project_1" id="r012_immagine_project_id_1" value=""></p>
-                            <p class="control-group span7"><label>Didascalia </label><input type="text" value="" id="r012_didascalia_id_1" name="r012_didascalia_project_1"></p>
+                            <p class="control-group">Inserisci immagine <input type="file" name="r012_immagine_project_1" id="r012_immagine_project_id_1" value=""></p>
+                            <p class="control-group"><label>Didascalia </label><input type="text" value="" id="r012_didascalia_id_1" name="r012_didascalia_project_1"></p>
                         </li>
                 </ul>
                 <?php
@@ -267,8 +267,8 @@ global $user_ID;
 
                     <li class="single-image span6">
                         <input type="hidden" name="r012_immagine_esistente_<?php echo $count_file; ?>" value="<?php echo $array_id;?>">
-                        <p class="control-group span4 clear"><?php echo wp_get_attachment_image($array_id, 'preview' );?></p>
-                        <p class="control-group span7"><label>Didascalia </label><input type="text" id="r012_didascalia_id_<?php echo $count_file; ?>" name="r012_didascalia_project_<?php echo $count_file; ?>" value="<?php echo get_post_field('post_excerpt', $array_id);?>">
+                        <p class="control-group"><?php echo wp_get_attachment_image($array_id, 'preview' );?></p>
+                        <p class="control-group"><label>Didascalia </label><input type="text" id="r012_didascalia_id_<?php echo $count_file; ?>" name="r012_didascalia_project_<?php echo $count_file; ?>" value="<?php echo get_post_field('post_excerpt', $array_id);?>">
 
                             <a class="r012-button-modifica-image" href="" title="Modifica immagine">Modifica immagine</a>
                             <input type="file" name="r012_immagine_project_<?php echo $count_file; ?>" id="r012_immagine_project_id_<?php echo $count_file; ?>"  value="">

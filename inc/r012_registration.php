@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: Webeing.net
- * Date: 15/11/12
- * Time: 14:15
- */
-
-/**
  * Ricevo i dati creo un nuovo cpt e invio mail
  *
  */
@@ -50,7 +43,7 @@ function r012_registration(){
 
         //Gestisce l'upload delle immagini
 
-        $uploaded_id = R012Utility::r012_upload_image($_FILES['r012_immagine'],$r012_nome. '-' .$r012_cognome);
+        $uploaded_id = R012Utility::r012_upload_image($_FILES['r012_immagine'],$r012_nome. '-' .$r012_cognome, $r012_post_id);
 
         if($r012_post_id) {
             update_post_meta($r012_post_id,'r012_studio_saved', $r012_studio);
@@ -83,10 +76,10 @@ function r012_registration(){
 
             $subject = R012_OGGETTO_MAIL_ADMIN;
             $msg = r012_signin_admin_email('Nuovo professionista iscritto e in attesa di approvazione', array(
-                    'nome' =>$r012_nome,
-                    'cognome' =>$r012_cognome,
-                    'mail' =>$r012_mail
-                ));
+                'nome' =>$r012_nome,
+                'cognome' =>$r012_cognome,
+                'mail' =>$r012_mail
+            ));
             //da riattivare
             wp_mail( $from, $subject, $msg, $headers );
 
@@ -110,34 +103,34 @@ function r012_registration(){
 }
 
 function register_nuovo_progetto(){
-   if($_POST){
+    if($_POST){
 
-    $r012_autore = (int) $_POST['r012_autore'];
-    $r012_stato = $_POST['r012_stato'];
-    $r012_nome = $_POST['r012_name_project'];
-    $r012_oggetto = $_POST['r012_oggetto'];
-    $r012_tipologia = $_POST['r012_tipologia'];
-    $r012_attivita = $_POST['r012_attivita'];
-    $r012_citta = $_POST['r012_citta_project'];
-    $r012_provincia = $_POST['r012_provincia_project'];
-    $r012_regione = $_POST['r012_regione_project'];
-    $r012_committente = $_POST['r012_committente_project'];
-    $r012_concept = $_POST['r012_concept_project'];
-    $r012_studio = $_POST['r012_studio_project'];
-    $r012_anno = $_POST['r012_anno_project'];
-    $r012_collaborazioni_professionisti = $_POST['r012_autocomplete_professionisti_item'];
-    $r012_collaborazioni_aziende = $_POST['r012_autocomplete_aziende_item'];
-    $r012_collaborazioni_rivenditori = $_POST['r012_autocomplete_rivenditori_item'];
-    $r012_collaborazioni_operatori = $_POST['r012_autocomplete_operatori_item'];
+        $r012_autore = (int) $_POST['r012_autore'];
+        $r012_stato = $_POST['r012_stato'];
+        $r012_nome = $_POST['r012_name_project'];
+        $r012_oggetto = $_POST['r012_oggetto'];
+        $r012_tipologia = $_POST['r012_tipologia'];
+        $r012_attivita = $_POST['r012_attivita'];
+        $r012_citta = $_POST['r012_citta_project'];
+        $r012_provincia = $_POST['r012_provincia_project'];
+        $r012_regione = $_POST['r012_regione_project'];
+        $r012_committente = $_POST['r012_committente_project'];
+        $r012_concept = $_POST['r012_concept_project'];
+        $r012_studio = $_POST['r012_studio_project'];
+        $r012_anno = $_POST['r012_anno_project'];
+        $r012_collaborazioni_professionisti = $_POST['r012_autocomplete_professionisti_item'];
+        $r012_collaborazioni_aziende = $_POST['r012_autocomplete_aziende_item'];
+        $r012_collaborazioni_rivenditori = $_POST['r012_autocomplete_rivenditori_item'];
+        $r012_collaborazioni_operatori = $_POST['r012_autocomplete_operatori_item'];
 
 
-    $r012_post_progetto = array( 'post_name'  => $r012_nome,
-        'post_title'     => $r012_nome,
-        'post_content'   => $r012_concept,
-        'post_type'      => 'progetto',
-        'post_status'   => 'publish'
-    );
-    $r012_post_progetto_id = wp_insert_post( $r012_post_progetto);
+        $r012_post_progetto = array( 'post_name'  => $r012_nome,
+            'post_title'     => $r012_nome,
+            'post_content'   => $r012_concept,
+            'post_type'      => 'progetto',
+            'post_status'   => 'publish'
+        );
+        $r012_post_progetto_id = wp_insert_post( $r012_post_progetto);
 
 
         if($r012_post_progetto_id) {
@@ -146,17 +139,17 @@ function register_nuovo_progetto(){
 
 
 
-                update_post_meta($r012_post_progetto_id,'r012_autore_saved', $r012_autore);
+            update_post_meta($r012_post_progetto_id,'r012_autore_saved', $r012_autore);
 
-                $elements = get_post_meta( $r012_autore, 'r012_progetti_professionisti_saved', true);
+            $elements = get_post_meta( $r012_autore, 'r012_progetti_professionisti_saved', true);
 
 
-                foreach ($elements as $element){
-                    $array_progetti[] = $element;
-                }
-                $array_progetti[] = $r012_post_progetto_id;
+            foreach ($elements as $element){
+                $array_progetti[] = $element;
+            }
+            $array_progetti[] = $r012_post_progetto_id;
 
-                update_post_meta($r012_autore,'r012_progetti_professionisti_saved', $array_progetti);
+            update_post_meta($r012_autore,'r012_progetti_professionisti_saved', $array_progetti);
 
 
 
@@ -190,20 +183,25 @@ function register_nuovo_progetto(){
             update_post_meta($r012_post_progetto_id,'r012_collaborazioni_operatori_saved', $r012_collaborazioni_operatori);
 
 
-               // $uploaded_id = R012Utility::r012_upload_image($_FILES['r012_immagine_project'], $_POST['nome']);
+
+
             session_start();
 
             $r012_sessione_autore = (int) $_SESSION['user_id'];
             $r012_sessione_id_attachment = (int) $_SESSION['id_attachment'];
-
+            $post_new_image = array();
             if($r012_sessione_autore==$r012_autore){
 
+                $post_new_image['attachment'] = 'attachment';
+                $post_new_image['ID'] = $r012_sessione_id_attachment;
+                $post_new_image['post_parent'] = $r012_post_progetto_id;
+                wp_update_post( $post_new_image );
                 set_post_thumbnail($r012_post_progetto_id , $r012_sessione_id_attachment);
                 unset($_SESSION['id_attachment']);
                 unset($_SESSION['user_id']);
             }
 
-            $immagine1 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_1'], $_POST['nome'] . '-1');
+            $immagine1 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_1'], $_POST['nome'] . '-1', $r012_post_progetto_id);
             if(intval($immagine1)>0){
 
                 $post_gallery['ID'] = $immagine1;
@@ -213,7 +211,7 @@ function register_nuovo_progetto(){
                 $array_ids = $immagine1;
             }
 
-            $immagine2 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_2'], $_POST['nome'] . '-2');
+            $immagine2 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_2'], $_POST['nome'] . '-2', $r012_post_progetto_id);
             if(intval($immagine2)>0){
                 $post_gallery['ID'] = $immagine2;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_2'];
@@ -223,7 +221,7 @@ function register_nuovo_progetto(){
 
             }
 
-            $immagine3 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_3'], $_POST['nome'] . '-3');
+            $immagine3 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_3'], $_POST['nome'] . '-3', $r012_post_progetto_id);
             if(intval($immagine3)>0){
                 $post_gallery['ID'] = $immagine3;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_3'];
@@ -231,7 +229,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine3;
             }
-            $immagine4 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_4'], $_POST['nome'] . '-4');
+            $immagine4 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_4'], $_POST['nome'] . '-4', $r012_post_progetto_id);
             if(intval($immagine4)>0){
                 $post_gallery['ID'] = $immagine4;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_4'];
@@ -239,7 +237,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine4;
             }
-            $immagine5 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_5'], $_POST['nome'] . '-5');
+            $immagine5 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_5'], $_POST['nome'] . '-5', $r012_post_progetto_id);
             if(intval($immagine5)>0){
                 $post_gallery['ID'] = $immagine5;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_5'];
@@ -247,7 +245,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine5;
             }
-            $immagine6 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_6'], $_POST['nome'] . '-6');
+            $immagine6 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_6'], $_POST['nome'] . '-6', $r012_post_progetto_id);
             if(intval($immagine6)>0){
                 $post_gallery['ID'] = $immagine6;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_6'];
@@ -255,7 +253,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine6;
             }
-            $immagine7 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_7'], $_POST['nome'] . '-7');
+            $immagine7 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_7'], $_POST['nome'] . '-7', $r012_post_progetto_id);
             if(intval($immagine7)>0){
                 $post_gallery['ID'] = $immagine7;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_7'];
@@ -263,7 +261,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine7;
             }
-            $immagine8 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_8'], $_POST['nome']. '-8');
+            $immagine8 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_8'], $_POST['nome']. '-8', $r012_post_progetto_id);
             if(intval($immagine8)>0){
                 $post_gallery['ID'] = $immagine8;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_8'];
@@ -271,7 +269,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine8;
             }
-            $immagine9 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_9'], $_POST['nome']. '-9');
+            $immagine9 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_9'], $_POST['nome']. '-9', $r012_post_progetto_id);
             if(intval($immagine9)>0){
                 $post_gallery['ID'] = $immagine9;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_9'];
@@ -279,7 +277,7 @@ function register_nuovo_progetto(){
                 wp_update_post( $post_gallery );
                 $array_ids = $array_ids . ',' . $immagine9;
             }
-            $immagine10 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_10'], $_POST['nome']. '-10');
+            $immagine10 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_10'], $_POST['nome']. '-10', $r012_post_progetto_id);
             if(intval($immagine10)>0){
                 $post_gallery['ID'] = $immagine10;
                 $post_gallery['post_excerpt'] = $_POST['r012_didascalia_project_10'];
@@ -296,7 +294,7 @@ function register_nuovo_progetto(){
             return $array_post_id;
         }
 
-   }
+    }
 
 
 }
@@ -333,34 +331,34 @@ function modifica_progetto(){
         wp_update_post( $r012_post_progetto);
 
 
-            $term_oggetto = get_term( $r012_oggetto, 'oggetto' );
-            $r012_name_term_oggetto = $term_oggetto->name;
-            wp_set_object_terms($r012_postid,$r012_name_term_oggetto,'oggetto');
+        $term_oggetto = get_term( $r012_oggetto, 'oggetto' );
+        $r012_name_term_oggetto = $term_oggetto->name;
+        wp_set_object_terms($r012_postid,$r012_name_term_oggetto,'oggetto');
 
-            $term_attivita = get_term( $r012_attivita, 'attivita' );
-            $r012_name_term_attivita = $term_attivita->name;
-            wp_set_object_terms($r012_postid,$r012_name_term_attivita,'attivita');
+        $term_attivita = get_term( $r012_attivita, 'attivita' );
+        $r012_name_term_attivita = $term_attivita->name;
+        wp_set_object_terms($r012_postid,$r012_name_term_attivita,'attivita');
 
-            $term_tipologia = get_term( $r012_tipologia, 'tipologia' );
-            $r012_name_term_tipologia = $term_tipologia->name;
-            wp_set_object_terms($r012_postid,$r012_name_term_tipologia, 'tipologia');
+        $term_tipologia = get_term( $r012_tipologia, 'tipologia' );
+        $r012_name_term_tipologia = $term_tipologia->name;
+        wp_set_object_terms($r012_postid,$r012_name_term_tipologia, 'tipologia');
 
-            $term_stato = get_term( $r012_stato, 'stato' );
-            $r012_name_term_stato = $term_stato->name;
-            wp_set_object_terms($r012_postid,$r012_name_term_stato, 'stato');
+        $term_stato = get_term( $r012_stato, 'stato' );
+        $r012_name_term_stato = $term_stato->name;
+        wp_set_object_terms($r012_postid,$r012_name_term_stato, 'stato');
 
-            update_post_meta($r012_postid,'r012_regione_saved', $r012_regione);
-            update_post_meta($r012_postid,'r012_localita_saved', $r012_citta);
-            update_post_meta($r012_postid,'r012_provincia_saved', $r012_provincia);
-            update_post_meta($r012_postid,'r012_anno_saved', $r012_anno);
-            update_post_meta($r012_postid,'r012_committente_saved', $r012_committente);
-            update_post_meta($r012_postid,'r012_studio_saved', $r012_studio);
+        update_post_meta($r012_postid,'r012_regione_saved', $r012_regione);
+        update_post_meta($r012_postid,'r012_localita_saved', $r012_citta);
+        update_post_meta($r012_postid,'r012_provincia_saved', $r012_provincia);
+        update_post_meta($r012_postid,'r012_anno_saved', $r012_anno);
+        update_post_meta($r012_postid,'r012_committente_saved', $r012_committente);
+        update_post_meta($r012_postid,'r012_studio_saved', $r012_studio);
 
 
-            update_post_meta($r012_postid,'r012_collaborazioni_professionisti_saved', $r012_collaborazioni_professionisti);
-            update_post_meta($r012_postid,'r012_collaborazioni_aziende_saved', $r012_collaborazioni_aziende);
-            update_post_meta($r012_postid,'r012_collaborazioni_rivenditori_saved', $r012_collaborazioni_rivenditori);
-            update_post_meta($r012_postid,'r012_collaborazioni_operatori_saved', $r012_collaborazioni_operatori);
+        update_post_meta($r012_postid,'r012_collaborazioni_professionisti_saved', $r012_collaborazioni_professionisti);
+        update_post_meta($r012_postid,'r012_collaborazioni_aziende_saved', $r012_collaborazioni_aziende);
+        update_post_meta($r012_postid,'r012_collaborazioni_rivenditori_saved', $r012_collaborazioni_rivenditori);
+        update_post_meta($r012_postid,'r012_collaborazioni_operatori_saved', $r012_collaborazioni_operatori);
 
 
 
@@ -370,7 +368,7 @@ function modifica_progetto(){
         $post_gallery = array();
         $array_ids ='';
 
-        $immagine_upload_1 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_1'], $_POST['nome'] . '-1');
+        $immagine_upload_1 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_1'], $_POST['nome'] . '-1', $r012_postid);
 
         if(intval($immagine_upload_1)>0){
 
@@ -397,7 +395,7 @@ function modifica_progetto(){
 
 
 
-        $immagine_upload_2 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_2'], $_POST['nome'] . '-2');
+        $immagine_upload_2 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_2'], $_POST['nome'] . '-2', $r012_postid);
 
         if(intval($immagine_upload_2)>0){
             $immagine2 = $immagine_upload_2;
@@ -421,7 +419,7 @@ function modifica_progetto(){
         }
 
 
-        $immagine_upload_3 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_3'], $_POST['nome'] . '-3');
+        $immagine_upload_3 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_3'], $_POST['nome'] . '-3', $r012_postid);
 
         if(intval($immagine_upload_3)>0){
             $immagine3 = $immagine_upload_3;
@@ -445,7 +443,7 @@ function modifica_progetto(){
 
         }
 
-        $immagine_upload_4 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_4'], $_POST['nome'] . '-4');
+        $immagine_upload_4 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_4'], $_POST['nome'] . '-4', $r012_postid);
 
         if(intval($immagine_upload_4)>0){
             $immagine4 = $immagine_upload_4;
@@ -470,7 +468,7 @@ function modifica_progetto(){
         }
 
 
-        $immagine_upload_5 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_5'], $_POST['nome'] . '-5');
+        $immagine_upload_5 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_5'], $_POST['nome'] . '-5', $r012_postid);
 
         if(intval($immagine_upload_5)>0){
             $immagine5 = $immagine_upload_5;
@@ -495,7 +493,7 @@ function modifica_progetto(){
         }
 
 
-        $immagine_upload_6 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_6'], $_POST['nome'] . '-6');
+        $immagine_upload_6 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_6'], $_POST['nome'] . '-6', $r012_postid);
 
         if(intval($immagine_upload_6)>0){
             $immagine6 = $immagine_upload_6;
@@ -520,7 +518,7 @@ function modifica_progetto(){
         }
 
 
-        $immagine_upload_7 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_7'], $_POST['nome'] . '-7');
+        $immagine_upload_7 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_7'], $_POST['nome'] . '-7', $r012_postid);
 
         if(intval($immagine_upload_7)>0){
             $immagine7 = $immagine_upload_7;
@@ -544,7 +542,7 @@ function modifica_progetto(){
 
         }
 
-        $immagine_upload_8 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_8'], $_POST['nome'] . '-8');
+        $immagine_upload_8 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_8'], $_POST['nome'] . '-8', $r012_postid);
 
         if(intval($immagine_upload_8)>0){
             $immagine8 = $immagine_upload_8;
@@ -568,7 +566,7 @@ function modifica_progetto(){
 
         }
 
-        $immagine_upload_9 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_9'], $_POST['nome'] . '-9');
+        $immagine_upload_9 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_9'], $_POST['nome'] . '-9', $r012_postid);
 
         if(intval($immagine_upload_9)>0){
             $immagine9 = $immagine_upload_9;
@@ -593,7 +591,7 @@ function modifica_progetto(){
         }
 
 
-        $immagine_upload_10 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_10'], $_POST['nome'] . '-10');
+        $immagine_upload_10 = R012Utility::r012_upload_image($_FILES['r012_immagine_project_10'], $_POST['nome'] . '-10', $r012_postid);
 
         if(intval($immagine_upload_10)>0){
             $immagine10 = $immagine_upload_10;
@@ -620,12 +618,13 @@ function modifica_progetto(){
         $gallery_progetto = '[gallery ids="'. $array_ids .'"]';
 
         update_post_meta($r012_postid,'r012_galleria_saved', $gallery_progetto);
-          $array_post_id = array('id_autore' => $r012_autore,
-        $array_post_id[] = 'id_post' => $r012_postid);
+        $array_post_id = array('id_autore' => $r012_autore,
+            $array_post_id[] = 'id_post' => $r012_postid);
         return $array_post_id;
-        }
+    }
 
 
 
 
 }
+?>

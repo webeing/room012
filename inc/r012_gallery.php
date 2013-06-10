@@ -21,6 +21,7 @@ class R012Gallery{
                         $array_image_id = $array_image_id . $array_id . ',';
                 endforeach;
                 $r012_value_galleria= '[gallery link="file" columns="5" ids="'.$array_image_id.'"]';
+
                 echo do_shortcode( $r012_value_galleria );
     }
 

@@ -16,11 +16,8 @@ class R012Azienda{
 
     public function R012Azienda(){
 
-
-
         add_action( 'add_meta_boxes', array('R012Azienda','r012_add_custom_box_scheda_azienda'));
         add_action( 'save_post', array('R012Azienda','r012_save_scheda_azienda'));
-        add_action( 'add_meta_boxes', array('R012Azienda','r012_add_custom_box_progetti'));
 
         $this->r012_register_scheda_azienda();
         $this->r012_create_categories_azienda_taxonomies();

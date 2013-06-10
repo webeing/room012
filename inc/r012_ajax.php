@@ -37,43 +37,43 @@ function r012_ajax_nuovo_progetto(){
 
     if($_POST){
 
-            if($_POST['nome']==null) {
-                echo responseReturn( 'error','Inserire il nome del progetto' );
-                exit();
-            }
-            elseif ($_POST['citta']==null) {
-                echo responseReturn( 'error','Inserire la città del progetto' );
-                exit();
-            }
-            elseif ($_POST['provincia']==null) {
-                echo responseReturn( 'error','Inserire la provincia del progetto' );
-                exit();
-            }
-            elseif ($_POST['anno']==null) {
-                echo responseReturn( 'error','Inserire anno del progetto' );
-                exit();
-            }
-            elseif ($_POST['immagine']=="" && $_POST['postid']==null) {
-                    echo responseReturn( 'error_image','Inserire immagine progetto' );
-                    exit();
-            }
+        if($_POST['nome']==null) {
+            echo responseReturn( 'error','Inserire il nome del progetto' );
+            exit();
+        }
+        elseif ($_POST['citta']==null) {
+            echo responseReturn( 'error','Inserire la città del progetto' );
+            exit();
+        }
+        elseif ($_POST['provincia']==null) {
+            echo responseReturn( 'error','Inserire la provincia del progetto' );
+            exit();
+        }
+        elseif ($_POST['anno']==null) {
+            echo responseReturn( 'error','Inserire anno del progetto' );
+            exit();
+        }
+        elseif ($_POST['immagine']=="" && $_POST['postid']==null) {
+            echo responseReturn( 'error_image','Inserire immagine progetto' );
+            exit();
+        }
 
-            elseif ($_POST['oggetto']==null) {
-                echo responseReturn( 'error','Inserire oggetto progetto' );
+        elseif ($_POST['oggetto']==null) {
+            echo responseReturn( 'error','Inserire oggetto progetto' );
+            exit();
+        }
+        else {
+            if($_POST['postid']==null){
+                echo responseReturn( 'success', 'Nuovo progetto creato');
                 exit();
-            }
-            else {
-                if($_POST['postid']==null){
-                    echo responseReturn( 'success', 'Nuovo progetto creato');
-                    exit();
 
-                } else{
-                    echo responseReturn( 'success', 'Progetto modificato');
-                    exit();
+            } else{
+                echo responseReturn( 'success', 'Progetto modificato');
+                exit();
 
-                }
             }
-     }
+        }
+    }
 
 }
 
@@ -138,13 +138,13 @@ function r012_salva_dati(){
 
         if($_POST['immagine']){
 
-                 //Gestisce l'upload delle immagini
-                 $cognome = get_post_meta($postid,'r012_cognome_saved',true);
-                 $nome = get_post_meta($postid,'r012_nome_saved',true);
-                 $nome_immagine = str_replace(" ", "", $nome.'-'.$cognome);
-                 $uploaded_id = R012Utility::r012_upload_image($_POST['immagine'],$nome_immagine);
+            //Gestisce l'upload delle immagini
+            $cognome = get_post_meta($postid,'r012_cognome_saved',true);
+            $nome = get_post_meta($postid,'r012_nome_saved',true);
+            $nome_immagine = str_replace(" ", "", $nome.'-'.$cognome);
+            $uploaded_id = R012Utility::r012_upload_image($_POST['immagine'],$nome_immagine, $postid);
 
-                 set_post_thumbnail($postid , $uploaded_id );
+            set_post_thumbnail($postid , $uploaded_id );
         }
 
         foreach($array_dati_bio as $key => $value){
@@ -188,7 +188,7 @@ function r012_salva_dati(){
                     }
 
                     wp_set_object_terms($postid,$id_term,'attivita_professionisti');
-                  break;
+                    break;
 
                 case 'r012_autocomplete_professionisti_item':
 
@@ -197,7 +197,7 @@ function r012_salva_dati(){
                         if($intvalue =="0"){
 
                         }else {
-                        array_push($id_professionista, $intvalue);
+                            array_push($id_professionista, $intvalue);
                         }
                     }
 
@@ -269,8 +269,8 @@ function r012_salva_dati(){
 
         }
 
-       echo responseReturn('success', 'salvataggio completato');
-       exit();
+        echo responseReturn('success', 'salvataggio completato');
+        exit();
     }
 }
 
@@ -289,7 +289,7 @@ function r012_ajax_delete_progetto(){
             if($post == $postid){
 
             } else{
-               array_push($array_progetti, intval($post));
+                array_push($array_progetti, intval($post));
             }
         }
         update_post_meta($userid,'r012_progetti_professionisti_saved', $array_progetti);

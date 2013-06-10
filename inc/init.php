@@ -206,3 +206,28 @@ MESSAGE;
     return $message;
 
 }
+
+/*
+
+$json = '[{"term_parent_id":"53","term_name":"Urbanistica, Pianificazione, Ambiente"},{"term_children":{"term_child":"93","term_name":"Architettura del paesaggio"}},{"term_children":{"term_child":"94","term_name":"Pianificazione territoriale e tutela ambientale"}},{"term_children":{"term_child":"92","term_name":"Progettazione urbanistica"}},{"term_children":{"term_child":"95","term_name":"Valutazioni d impatto ambientale"}},{"term_parent_id":"49","term_name":"Rilievo, Topografia, Catasto"},{"term_children":{"term_child":"86","term_name":"Catasto"}},{"term_children":{"term_child":"87","term_name":"Pratiche catastali"}},{"term_children":{"term_child":"84","term_name":"Rilievo"}},{"term_children":{"term_child":"85","term_name":"Tipografia"}},{"term_parent_id":"52","term_name":"Progettazioni Speciali"},{"term_children":{"term_child":"90","term_name":"Acustica"}},{"term_children":{"term_child":"88","term_name":"Prevenzione incendi"}},{"term_children":{"term_child":"91","term_name":"Progettazione meccanica"}},{"term_children":{"term_child":"89","term_name":"Risparmio energetico"}},{"term_parent_id":"41","term_name":"Progettazione Architettonica"},{"term_children":{"term_child":"63","term_name":"Architetture temporanee, installazioni"}},{"term_children":{"term_child":"57","term_name":"Commerciale"}},{"term_children":{"term_child":"58","term_name":"Direzionale, Uffici"}},{"term_children":{"term_child":"59","term_name":"Edilizia Scolastica"}},{"term_children":{"term_child":"56","term_name":"Residenziale"}},{"term_children":{"term_child":"61","term_name":"Ristorazione (___)"}},{"term_children":{"term_child":"60","term_name":"Settore turistico (strutture ricettive, stabilimenti balneari)"}},{"term_children":{"term_child":"62","term_name":"Strutture sanitarie"}},{"term_parent_id":"43","term_name":"Infrastrutture"},{"term_children":{"term_child":"72","term_name":"Progettazione ferroviaria"}},{"term_children":{"term_child":"73","term_name":"Progettazione marittima e portuale"}},{"term_children":{"term_child":"71","term_name":"Progettazione stradale"}},{"term_parent_id":"48","term_name":"Impiantistica"},{"term_children":{"term_child":"83","term_name":"Impianti fotovoltaici"}},{"term_children":{"term_child":"81","term_name":"Impianti termoidraulici"}},{"term_children":{"term_child":"82","term_name":"Impiantisti elettrici Telecomunicazioni"}},{"term_parent_id":"44","term_name":"Idraulica"},{"term_children":{"term_child":"70","term_name":"Idraulica"}},{"term_children":{"term_child":"69","term_name":"Opere idrauliche, condotte, fognature"}},{"term_parent_id":"45","term_name":"Geotecnica"},{"term_children":{"term_child":"75","term_name":"Indagini del sottosuolo, carotaggi"}},{"term_children":{"term_child":"74","term_name":"Progettazione geologica, geotecnica"}},{"term_parent_id":"54","term_name":"Disegno CAD, Grafica, Modellisti"},{"term_children":{"term_child":"96","term_name":"Disegno Cad e modellazione 3d"}},{"term_children":{"term_child":"97","term_name":"Grafica, computer art"}},{"term_children":{"term_child":"98","term_name":"Modellistica"}},{"term_parent_id":"46","term_name":"Direzione lavori e cantiere"},{"term_children":{"term_child":"77","term_name":"Coordinamento sicurezza del cantiere"}},{"term_children":{"term_child":"76","term_name":"Direzione lavori"}},{"term_parent_id":"47","term_name":"Design\/Arredo d interni"},{"term_children":{"term_child":"78","term_name":"Arredo e design d interni"}},{"term_children":{"term_child":"80","term_name":"Design industriale"}},{"term_children":{"term_child":"79","term_name":"Illuminazione d interni"}},{"term_parent_id":"51","term_name":"Consulenze"},{"term_parent_id":"50","term_name":"Computo e contabilit\u00e0"},{"term_parent_id":"42","term_name":"Calcolo Strutturale"},{"term_children":{"term_child":"64","term_name":"Calcolo strutturale edifici civili"}},{"term_children":{"term_child":"65","term_name":"Calcolo strutturale edifici industriali"}},{"term_children":{"term_child":"66","term_name":"Progettazione ponti e viadotti"}},{"term_children":{"term_child":"67","term_name":"Prove tecniche strutturali, collaudi"}},{"term_parent_id":"55","term_name":"Altro"}]';
+$json_decode = json_decode($json);
+
+foreach($json_decode as $term){
+
+    if(($term->term_parent_id)){
+       wp_insert_term(
+            $term->term_name, // the term
+            'attivita_professionisti' // the taxonomy
+
+        );
+        /* foreach ( $term as $term_child){
+            wp_insert_term(
+                $term->term_name, // the term
+                'attivita_professionisti',
+                 array('parent'=> $parent['term_id'])// the taxonomy
+
+            );
+        }
+    }
+
+}*/
