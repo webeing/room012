@@ -31,6 +31,8 @@ add_action('wp_ajax_nopriv_r012_load', array('R012Professionista','r012_load'), 
 add_action('wp_ajax_r012_upload_image', 'r012_ajax_upload_image');
 add_action('wp_ajax_nopriv_r012_upload_image', 'r012_ajax_upload_image');
 
+
+
 function r012_ajax_nuovo_progetto(){
 
 
@@ -183,7 +185,6 @@ function r012_salva_dati(){
                         $parent  = get_term_by( 'id', $intvalue, 'attivita_professionisti');
 
                         array_push($id_term, intval($parent->parent));
-
 
                     }
 

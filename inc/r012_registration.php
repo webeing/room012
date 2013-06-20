@@ -11,6 +11,7 @@ function r012_registration(){
         $r012_piva = $_POST['r012_piva'];
         $r012_titolo = $_POST['r012_titolo'];
         $r012_ordine = $_POST['r012_ordine'];
+        $r012_provincia_ordine = $_POST['r012_provincia_ordine'];
         $r012_numero = $_POST['r012_numero'];
         $r012_nome_studio = $_POST['r012_nome_studio'];
         $r012_posizione = $_POST['r012_posizione'];
@@ -23,11 +24,13 @@ function r012_registration(){
         $r012_via = $_POST['r012_via'];
         $r012_cap = $_POST['r012_cap'];
         $r012_provincia = $_POST['r012_provincia'];
+        $r012_regione = $_POST['r012_regione'];
         $r012_biografia = $_POST['r012_biografia'];
         $r012_facebook = $_POST['r012_facebook'];
         $r012_twitter = $_POST['r012_twitter'];
         $r012_skype = $_POST['r012_skype'];
         $r012_linkedin   = $_POST['r012_linkedin'];
+
 
 
         $term = get_term( $r012_titolo, 'categorie_professionisti' );
@@ -39,6 +42,7 @@ function r012_registration(){
             'post_type'      => 'professionisti'
         );
         $r012_post_id = wp_insert_post( $r012_post);
+
         wp_set_object_terms($r012_post_id,$r012_name_term_titolo,'categorie_professionisti');
 
         //Gestisce l'upload delle immagini
@@ -57,7 +61,8 @@ function r012_registration(){
             update_post_meta($r012_post_id,'r012_via_saved', $r012_via);
             update_post_meta($r012_post_id,'r012_cap_saved', $r012_cap);
             update_post_meta($r012_post_id,'r012_provincia_saved', $r012_provincia);
-            update_post_meta($r012_post_id,'r012_ordine_saved', $r012_ordine);
+            update_post_meta($r012_post_id,'r012_regione_saved', $r012_regione);
+            update_post_meta($r012_post_id,'r012_provincia_ordine_saved', $r012_provincia_ordine);
             update_post_meta($r012_post_id,'r012_numero_saved', $r012_numero);
             update_post_meta($r012_post_id,'r012_nome_studio_saved', $r012_nome_studio);
             update_post_meta($r012_post_id,'r012_posizione_saved', $r012_posizione);
@@ -69,6 +74,10 @@ function r012_registration(){
             update_post_meta($r012_post_id,'r012_linkedin_saved', $r012_linkedin);
 
             set_post_thumbnail( $r012_post_id, $uploaded_id );
+
+            $term = get_term( $r012_ordine, 'ordini_professionisti' );
+            $r012_name_term_ordine = $term->name;
+            wp_set_object_terms($r012_post_id,$r012_name_term_ordine,'ordini_professionisti');
 
             $from = R012_ADMIN_MAIL;
             $headers = 'From: '.$from . "\r\n";

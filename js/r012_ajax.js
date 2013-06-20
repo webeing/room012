@@ -37,7 +37,8 @@ jQuery(function($){
             citta: $('input[name="r012_citta"]').val(),
             via: $('input[name="r012_via"]').val(),
             cap: $('input[name="r012_cap"]').val(),
-            provincia: $('input[name="r012_provincia"]').val(),
+            provincia: $('select#r012_provincia_id option:selected').val(),
+            regione: $('select#r012_regione_id option:selected').val(),
             img: $('input[name="upload_image"]').val(),
             licenza: $('#r012_licenza').attr('checked'),
             remote_addr: $('#r012_remote_addr').val(),
@@ -281,6 +282,7 @@ jQuery(function($){
         });
 
     });
+
 
 
 });

@@ -4,6 +4,7 @@
  */
 get_header();?>
 
+
     <?php if($_POST['r012_registration']):
 
         $registration = r012_registration();
@@ -28,17 +29,21 @@ get_header();?>
 
     <?php else: ?>
     <form id="r012_register_form" name="r012_register_form" method="post" enctype="multipart/form-data" novalidate="novalidate" class="form-horizontal">
+	    <header class="messaggio">
+	        <h3 class="alert"><?php _e('Guest Book Aziende, Imprese e Operatori, Rivenditori, Enti e Associazioni: ','r012');?><br/><a href="/richiesta-iscrizione" title="richiesta-iscrizione">clicca qui per richiedere iscrizione</a></br/></h3>
+	        <legend><h3><strong><?php _e('Guest Book professionisti: compila il modulo e registrati','r012');?></strong></h3></legend>
+	    </header>
     
         <fieldset>
-            <legend><h2>Guest book ROOM 012: Registrati</h2></legend>
+
             <input id="r012_registration" name="r012_registration" value="1" type="hidden" />
             
             <p class="control-group span5">
-                <label for="r012_nome_id"><?php _e("Nome", 'r012' ); ?> <small class="red">[*]</small></label>
+                <label for="r012_nome_id"><?php _e("Nome", 'r012' ); ?> <small>[*]</small></label>
                 <input type="text" name="r012_nome" id="r012_nome_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_cognome_id"><?php _e("Cognome", 'r012' ); ?> <small class="red">[*]</small></label>
+                <label for="r012_cognome_id"><?php _e("Cognome", 'r012' ); ?> <small>[*]</small></label>
                 <input type="text" name="r012_cognome" id="r012_cognome_id" value="" />
             </p>
             <p class="control-group span12">
@@ -50,11 +55,12 @@ get_header();?>
                 <input type="text" name="r012_piva" id="r012_piva_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_titolo_id"><?php _e("Titolo professionale", 'r012' ); ?>  <small class="red">[*]</small></label>
+                <label for="r012_titolo_id"><?php _e("Titolo professionale", 'r012' ); ?>  <small>[*]</small></label>
             <?php
                 $r012_args = array(
                     'show_option_none'   => 'Seleziona un titolo',
                     'order'              => 'ASC',
+                    'orderby'            => 'name',
                     'name'               => 'r012_titolo',
                     'id'                 => 'r012_titolo_id',
                     'hide_empty'         => 0,
@@ -64,7 +70,28 @@ get_header();?>
             </p>
             <p class="control-group span5">
                 <label for="r012_ordine_id"><?php _e("Ordine iscrizione", 'r012' ); ?> </label>
-                <input type="text" name="r012_ordine" id="r012_ordine_id" value="" />
+                <?php $r012_args = array(
+                'show_option_none'   => 'Seleziona un ordine',
+                'order'              => 'ASC',
+                'name'               => 'r012_ordine',
+                'id'                 => 'r012_ordine_id',
+                'hide_empty'         => 0,
+                'taxonomy'           => 'ordini_professionisti'
+                );
+                wp_dropdown_categories( $r012_args ); ?>
+            </p>
+            <p class="control-group span5">
+                <label for="r012_provincia_ordine"><?php _e("Provincia dell'ordine", 'r012' ); ?></label>
+                <?php global $province;
+                echo '<select name="r012_provincia_ordine" id="r012_provincia_ordine_id">';
+                foreach ($province as $key => $value) {
+                    if($value == $r012_value_provincia){
+                        echo '<option value='.$value.' selected>'.$key.'</option>';
+                    } else {
+                        echo '<option value='.$value.'>'.$key.'</option>';
+                    }
+                }
+                echo '</select>'; ?>
             </p>
             <p class="control-group span5">
                 <label for="r012_numero_id"><?php _e("Numero iscrizione", 'r012' ); ?> </label>
@@ -95,7 +122,7 @@ get_header();?>
                  <input type="text" name="r012_fax" id="r012_fax_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_mail_id"><?php _e("Email", 'r012' ); ?> <small class="red">[*]</small></label>
+                <label for="r012_mail_id"><?php _e("Email", 'r012' ); ?> <small>[*]</small></label>
                 <input type="email" name="r012_mail" id="r012_mail_id" value="" />
             </p>
             <p class="control-group span5">
@@ -103,11 +130,11 @@ get_header();?>
                  <input type="text" name="r012_sito" id="r012_sito_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_citta_id"><?php _e("Città", 'r012' ); ?> </label>
+                <label for="r012_citta_id"><?php _e("Città", 'r012' ); ?> <small class="red">[*]</small></label>
                 <input type="text" name="r012_citta" id="r012_citta_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_citta_id"><?php _e("Via", 'r012' ); ?> </label>
+                <label for="r012_via_id"><?php _e("Via", 'r012' ); ?> </label>
                 <input type="text" name="r012_via" id="r012_via_id" value="" />
             </p>
             <p class="control-group span5">
@@ -115,8 +142,33 @@ get_header();?>
                  <input type="text" name="r012_cap" id="r012_cap_id" value="" />
             </p>
             <p class="control-group span5">
-                <label for="r012_provincia_id"><?php _e("Provincia", 'r012' ); ?> </label>
-               <input type="text" name="r012_provincia" id="r012_provincia_id" value="" />
+                <label for="r012_provincia"><?php _e("Provincia ", 'r012' ); ?><small>[*]</small></label>
+                <?php global $province;
+                echo '<select name="r012_provincia" id="r012_provincia_id">';
+                    foreach ($province as $key => $value) {
+                        if($value == $r012_value_provincia){
+                        echo '<option value='.$value.' selected>'.$key.'</option>';
+                        } else {
+                        echo '<option value='.$value.'>'.$key.'</option>';
+                        }
+                    }
+                echo '</select>'; ?>
+            </p>
+            <p class="control-group span5">
+                <label for="r012_provincia"><?php _e("Regione", 'r012' ); ?></label>
+                <?php
+                global $regioni;
+
+                echo '<select name="r012_regione" id="r012_regione_id">';
+                    foreach ($regioni as $key => $value) {
+                    if($value == $r012_value_regione){
+                    echo '<option value='.$value.' selected>'. $key .'</option>';
+                    } else {
+                    echo '<option value='.$value.'>'. $key .'</option>';
+                    }
+
+                    }
+                    echo '</select>';?>
             </p>
             <p class="control-group span5">
                 <label for="r012_immagine_id"><?php _e("Immagine", 'r012' ); ?> <small>risoluzione 72dpi 500px per 500px</small></label>
@@ -139,7 +191,7 @@ get_header();?>
                 <input type="text" name="r012_linkedin" id="r012_linkedin_id" value="" />
             </p>
             <p class="control-group span5">
-                <span><a href="<?php echo get_permalink(R012_ID_PAGE_TERMINI_CONDIZIONI); ?>" target="_blank">Accetta termini e condizioni</a> <small class="red">[*]</small></span>
+                <span><a href="<?php echo get_permalink(R012_ID_PAGE_TERMINI_CONDIZIONI); ?>" target="_blank">Accetta termini e condizioni</a> <small>[*]</small></span>
                 <input name="r012_licenza" id="r012_licenza" class="text" value="" type="checkbox"/>
             </p>
 

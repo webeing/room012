@@ -47,6 +47,7 @@ if ( ! function_exists( 'wp_room012_init' ) ):
      * classe autocomplete
      */
     include_once TEMPLATEPATH . "/inc/r012_autocomplete.php";
+
     /**
      * classe gallery
      */
@@ -290,6 +291,8 @@ function r012_admin_scripts() {
         //'nonce' => wp_create_nonce('r012_professionisti_nonce')
 
     ));
+
+
 }
 
 function r012_scripts() {
@@ -337,7 +340,14 @@ function r012_scripts() {
         //'nonce' => wp_create_nonce('r012_professionisti_nonce')
 
     ));
+    wp_register_script( 'r012-ricerca-avanzata', get_template_directory_uri() . '/js/r012_ricerca-avanzata.js', array('jquery', 'jquery-ui'),'','true');
+    wp_enqueue_script( 'r012-ricerca-avanzata' );
 
+    wp_localize_script( 'r012-ricerca-avanzata', 'r012_ricerca_data', array(
+        'adminurl' => admin_url('admin-ajax.php')
+        //'nonce' => wp_create_nonce('r012_professionisti_nonce')
+
+    ));
 }
 
 function wp_room012_share()

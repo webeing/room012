@@ -13,6 +13,292 @@ function r012_utility_setup(){
  */
 class R012Utility {
 
+
+    /**
+     * @param $form_name
+     * @param $_POST
+     *
+     * Pubblica a video la form per creare la ricerca avanzata, parametrizzata sui vari casi
+     */
+    public static function r012_advanced_search_form($form_name, $_POST){
+?>
+    <form id="<?php echo $form_name . '_id' ?>" name="<?php echo $form_name ?>" method="post" enctype="multipart/form-data" novalidate="novalidate" class="form-horizontal">
+        <section class="row-fluid">
+                <div class="span12  content-research">
+
+                    <div class="nominativo"><!-- nominativo -->
+                        <p class="title-research span3">
+                            Inserisci il nominativo:
+                        </p>
+                        <input type="text" class="span5" placeholder="inserisci il nome..." name="r012_name_search" value="<?php echo $_POST['r012_name_search'] ?>" />
+                        <input type="text" class="span5" placeholder="inserisci il cognome..." name="r012_last_name_search" value="<?php echo $_POST['r012_last_name_search'] ?>" />
+                        <div class="clear"></div>
+                    </div><!-- ./nominativo -->
+
+                    <div class="span3 clear">
+                        <header class="title-research"><!-- professionista -->
+                            Professionista
+                            <span class="sprite-arrow"></span>
+                        </header>
+
+                        <div class="content-filter">
+                            <?php $terms = get_terms("categorie_professionisti"); ?>
+                            <ul>
+                                <?php foreach ( $terms as $term ) { ?>
+                                    <?php $checked = ""; ?>
+                                    <li class="professioni-checklist">
+                                        <?php
+                                            if ( in_array($term->term_id, $_POST['r012_categorie_professionista'] ) )
+                                                $checked = 'checked="checked"'
+                                        ?>
+
+                                        <input <?php echo $checked ?> type="checkbox" value="<?php echo $term->term_id; ?>" name="r012_categorie_professionista[]">
+                                        <?php echo $term->name; ?>
+
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div><!-- ./ content-filter professionisti -->
+
+                    </div><!-- ./ span3 -->
+
+                    <div class="span5">
+                        <div class="content-filter">
+
+                            <header class="title-research"><!-- attività -->
+                                Settore di attività
+                                <span class="sprite-arrow"></span>
+                            </header>
+                            <?php $args_all_terms = array(
+
+                                'hide_empty'    => 0,
+                                'fields'        => 'all',
+                                'order'         => 'DESC',
+                            );
+
+                            $terms = get_terms('attivita_professionisti',$args_all_terms);
+
+
+                            foreach ( $terms as $term ) {
+
+                                $checked = "";
+
+                                if($term->parent==0){ ?>
+                                    <div class="content-checklist attivita">
+                                        <?php
+                                            if ( in_array($term->term_id, $_POST['r012_attivita_item'] ) )
+                                                $checked = 'checked="checked"'
+                                        ?>
+                                        <input <?php echo $checked ?> type="checkbox" value="<?php echo $term->term_id; ?>" name="r012_attivita_item[]"  id="check_parent">
+                                        <?php echo $term->name; ?>
+                                    </div>
+
+                                    <?php
+                                    $args = array(
+                                        'hide_empty'=> 0,
+                                        'child_of'  => $term->term_id);
+
+                                    $r012_termini_attivita = get_terms( 'attivita_professionisti', $args );
+                                    echo '<ul class="sub-checklist">';
+                                    foreach($r012_termini_attivita as $r012_termine_attivita){
+                                        $checked = "";
+
+                                        if ( in_array($r012_termine_attivita->term_id, $_POST['r012_attivita_item'] ) )
+                                            $checked = 'checked="checked"'
+                                        ?>
+
+
+                                        <li>
+                                            <input <?php echo $checked ?> type="checkbox" value="<?php echo $r012_termine_attivita->term_id; ?>" name="r012_attivita_item[]">
+                                            <?php echo $r012_termine_attivita->name; ?>
+                                        </li>
+
+
+                                    <?php }
+                                    echo '</ul>';
+                                }
+                            }?>
+                        </div><!-- ./ content-filter attività -->
+                    </div><!-- ./ span3 -->
+
+
+                    <div class="span3">
+                        <div class="title-research"><!-- regione -->
+                            Regione / Provincia
+                            <span class="sprite-arrow"></span>
+                        </div>
+
+                        <div class="content-filter">
+
+                            <?php global $regioni;
+                            foreach ($regioni as $key_regione => $value_regione) {
+                                $checked = "";
+                                if($value_regione == 0){
+
+                                } else {
+
+                                    if ( in_array($value_regione, $_POST['r012_regioni_item'] ) )
+                                        $checked = 'checked="checked"';
+                                    ?>
+                                    <div class="regioni-checklist">
+                                        <input <?php echo $checked ?> type="checkbox" value="<?php echo $value_regione; ?>" name="r012_regioni_item[]"  id="check_parent">
+                                        <?php echo $key_regione; ?>
+                                    </div>
+
+                                <?php
+                                }
+                                global $province;
+                                global $regioni_province;
+
+                                echo '<ul class="sub-checklist">';
+                                foreach($regioni_province as $key_regione_provincia => $value_regione_provincia){
+                                    if($value_regione == $value_regione_provincia) {
+
+                                        foreach($province as $key_province => $value_provincia){
+                                            if($key_province == $key_regione_provincia){
+                                                $checked = "";
+
+                                                if ( in_array($value_provincia, $_POST['r012_province_item'] ) )
+                                                    $checked = 'checked="checked"';
+
+                                                ?>
+                                                <li>
+                                                    <input <?php echo $checked ?> type="checkbox" value="<?php echo $value_provincia; ?>" name="r012_province_item[]">
+                                                    <?php echo $key_province; ?>
+                                                </li>
+
+                                            <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
+
+
+                                <?php }
+                                echo '</ul>';
+                            } ?>
+
+                        </div><!-- ./ content-filter regione -->
+                    </div>
+
+                    <div class="btn-research"><!-- cerca -->
+                        <a class="ricerca-avanzata" title="Cerca il professionista nel sito Room012">Cerca</a>
+                    </div><!-- ./cerca -->
+
+                </div>
+           </section>
+    </form>
+<?php
+    }
+
+    /**
+     * @param $_POST
+     * @param int $paged
+     * @return array
+     *
+     * Logica di gestione della ricerca avanzata sulla piattaforma
+     */
+    public static function r012_advanced_search($_POST, $paged = 1){
+
+        $meta_query = array();
+        //$name = array();
+        if($_POST["r012_name_search"]){
+
+            $name = $_POST["r012_name_search"];
+            $meta_query =  array(
+                array(
+                    'key' => 'r012_nome_saved',
+                    'value' => $name,
+                    'compare' => 'LIKE'
+                )
+            );
+
+        }
+
+        //$meta_query_last_name = array();
+        /*
+         * if($_POST["r012_last_name_search"]){
+            $meta_query_last_name = array(
+                'key' => 'r012_cognome_saved',
+                'value' => $_POST["r012_last_name_search"],
+                'compare' => 'LIKE'
+            );
+        }*/
+        /* $meta_query = array();
+        if($_POST["r012_regioni_item"]){
+            $meta_query = array(
+                'key' => 'r012_regione_saved',
+                'value' => $_POST["r012_regioni_item"],
+                'compare' => '='
+            );
+
+        }*/
+
+        if($_POST["r012_province_item"]){
+
+        }
+
+
+        $tax_query = array();
+        if( $_POST["r012_categorie_professionista"] && $_POST["r012_attivita_item"]) {
+            $tax_query = array(
+                'relation' => 'AND',
+                array(
+                    'taxonomy' => 'categorie_professionisti',
+                    'field' => 'id',
+                    'terms' => $_POST["r012_categorie_professionista"],
+                    'operator' => 'IN'
+
+                ),
+                array(
+                    'taxonomy' => 'attivita_professionisti',
+                    'field' => 'id',
+                    'terms' => $_POST["r012_attivita_item"],
+                    'operator' => 'IN'
+                )
+            );
+        } elseif ($_POST["r012_categorie_professionista"]){
+            $tax_query = array(
+                array(
+                    'taxonomy' => 'categorie_professionisti',
+                    'field' => 'id',
+                    'terms' => $_POST["r012_categorie_professionista"],
+                    'operator' => 'IN'
+
+                )
+            );
+        } elseif ($_POST["r012_attivita_item"]) {
+            $tax_query = array(
+                array(
+                    'taxonomy' => 'attivita_professionisti',
+                    'field' => 'id',
+                    'terms' => $_POST["r012_attivita_item"],
+                    'operator' => 'IN'
+
+                )
+            );
+        } else {
+            $tax_query = "";
+        }
+
+
+        $r012_term_args = array(
+
+            'posts_per_page' => 30,
+            'post_status' => 'publish',
+            'post_type' => 'professionisti',
+            'order'    => 'ASC',
+            'paged' => $paged,
+            'meta_query' => $meta_query,
+            'tax_query' => $tax_query
+
+
+        );
+
+
+        return $r012_term_args;
+    }
+
     //my dump
     public function r012_mydump($dump){
         echo '<pre>';
@@ -25,16 +311,16 @@ class R012Utility {
     //group by
     public function r012_group_by_array($array){
 
-
-        foreach ($array as $data) {
-            $id = $data['c'];
-            if (isset($results[$id])) {
-                $results[$id][] = $data;
-            } else {
-                $results[$id] = array($data);
+        if($array){
+            foreach ($array as $data) {
+                $id = $data['c'];
+                if (isset($results[$id])) {
+                    $results[$id][] = $data;
+                } else {
+                    $results[$id] = array($data);
+                }
             }
         }
-
         return $results;
     }
 
@@ -197,7 +483,7 @@ HTML;
         if ( $_FILES['r012_immagine_project'] ){
             $file = $_FILES['r012_immagine_project'];
             $name = $file["name"];
-            $uploaded_id = $this->r012_upload_image($file, $name);
+            $uploaded_id = $this->r012_upload_image($file, $name,'');
             $image_attributes = wp_get_attachment_image_src( $uploaded_id , 'thumb-single');
             $path = $image_attributes[0];
             session_start();

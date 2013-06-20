@@ -289,7 +289,8 @@ class R012Professionista{
             $r012_value_via = get_post_meta( $post->ID, 'r012_via_saved', true);
             $r012_value_cap = get_post_meta( $post->ID, 'r012_cap_saved', true);
             $r012_value_provincia = get_post_meta( $post->ID, 'r012_provincia_saved', true);
-            $r012_value_ordine = get_post_meta( $post->ID, 'r012_ordine_saved', true);
+            $r012_value_provincia_ordine = get_post_meta( $post->ID, 'r012_provincia_ordine_saved', true);
+            $r012_value_regione = get_post_meta( $post->ID, 'r012_regione_saved', true);
             $r012_value_numero = get_post_meta( $post->ID, 'r012_numero_saved', true);
             $r012_value_nome_studio = get_post_meta( $post->ID, 'r012_nome_studio_saved', true);
             $r012_value_posizione = get_post_meta( $post->ID, 'r012_posizione_saved', true);
@@ -337,10 +338,10 @@ class R012Professionista{
             echo '</label>';
             echo '<input type="text" name="r012_piva" id="r012_piva_id" value="'.$r012_value_piva.'" /></p>';
 
-            echo '<p><label for="r012_ordine">';
-            _e("Ordine iscrizione", 'r012' );
+            echo '<p><label for="r012_provincia_ordine">';
+            _e("Provincia dell'ordine", 'r012' );
             echo '</label>';
-            echo '<input type="text" name="r012_ordine" id="r012_ordine_id" value="'.$r012_value_ordine.'" /></p>';
+            echo '<input type="text" name="r012_provincia_ordine" id="r012_provincia_ordine_id" value="'.$r012_value_provincia_ordine.'" /></p>';
 
             echo '<p><label for="r012_numero">';
             _e("Numero iscrizione", 'r012' );
@@ -413,6 +414,21 @@ class R012Professionista{
                 }
             echo '</select>';
 
+            echo '<p><label for="r012_regione">';
+            _e("Regione", 'r012' );
+            echo '</label>';
+            global $regioni;
+            echo '<select name="r012_regione" id="r012_regione_id">';
+            foreach ($regioni as $key => $value) {
+                if($value == $r012_value_regione){
+                    echo '<option value='.$value.' selected>'.$key.'</option>';
+                } else {
+                    echo '<option value='.$value.'>'.$key.'</option>';
+                }
+
+            }
+            echo '</select>';
+
             $checked_junior ='';
             if ($r012_value_junior == 1){
                 $checked_junior = ' checked="checked"';
@@ -469,9 +485,15 @@ class R012Professionista{
             if (isset($_POST['r012_provincia'])){
             $r012_provincia = $_POST['r012_provincia'];
             }
-            if (isset($_POST['r012_ordine'])){
-            $r012_ordine = $_POST['r012_ordine'];
+
+            if (isset($_POST['r012_provincia_ordine'])){
+            $r012_provincia_ordine = $_POST['r012_provincia_ordine'];
             }
+
+            if (isset($_POST['r012_regione'])){
+                $r012_regione = $_POST['r012_regione'];
+            }
+
             if (isset($_POST['r012_numero'])){
             $r012_numero = $_POST['r012_numero'];
             }
@@ -583,7 +605,8 @@ class R012Professionista{
             update_post_meta($post_id,'r012_via_saved', $r012_via);
             update_post_meta($post_id,'r012_cap_saved', $r012_cap);
             update_post_meta($post_id,'r012_provincia_saved', $r012_provincia);
-            update_post_meta($post_id,'r012_ordine_saved', $r012_ordine);
+            update_post_meta($post_id,'r012_regione_saved', $r012_regione);
+            update_post_meta($post_id,'r012_provincia_ordine_saved', $r012_provincia_ordine);
             update_post_meta($post_id,'r012_numero_saved', $r012_numero);
             update_post_meta($post_id,'r012_nome_studio_saved', $r012_nome_studio);
             update_post_meta($post_id,'r012_posizione_saved', $r012_posizione);
@@ -1070,6 +1093,23 @@ class R012Professionista{
                                     <?php wp_dropdown_categories( $r012_args ); ?>
                                 </label>
 
+                                    <label for="r012_provincia_ordine_saved" class="span3">provincia dell'iscrizione
+                                        <?php $r012_value_provincia = get_post_meta( $postid, 'r012_provincia_ordine_saved', true);
+                                        global $province;
+                                        echo '<select name="r012_provincia_ordine_saved" placeholder="Provincia Ordine">';
+                                        foreach ($province as $key => $value) {
+                                            if($value == $r012_value_provincia){
+                                                echo '<option value='.$value.' selected>'.$key.'</option>';
+                                            } else {
+                                                echo '<option value='.$value.'>'.$key.'</option>';
+                                            }
+
+                                        }
+                                        echo '</select>'; ?>
+                                    </label>
+
+                            </li>
+                            <li>
                                 <label for="r012_numero_saved" class="span3">numero iscrizione
                                     <input type="text" name="r012_numero_saved" placeholder="Numero Ordine" value="<?php echo get_post_meta($postid,'r012_numero_saved',true);?>">
                                 </label>
@@ -1099,8 +1139,8 @@ class R012Professionista{
                                 <label for="r012_posizione_saved" class="span3">posizione occupata
                                 <input type="text" name="r012_posizione_saved" placeholder="Posizione" value ="<?php echo get_post_meta( $postid, 'r012_posizione_saved', true);?>">
                                 </label>
-                            </li>
-                            <li>
+
+
                                 <label for="r012_sito_saved" class="span3">sito web
                                 <input type="text" name="r012_sito_saved" placeholder="Sito web" value="<?php echo get_post_meta( $postid, 'r012_sito_saved', true);?>">
                                 </label>
@@ -1173,6 +1213,22 @@ class R012Professionista{
                                             echo '</select>'; ?>
                                     </label>
                                 </div>
+                                <div class="control-group">
+                                    <label for="r012_regione_saved" class="span3">regione
+                                        <?php $r012_value_regione = get_post_meta( $postid, 'r012_regione_saved', true);
+                                        global $regioni;
+                                        echo '<select name="r012_regione_saved" name="r012_regione_saved" placeholder="Regione">';
+                                        foreach ($regioni as $key => $value) {
+                                            if($value == $r012_value_regione){
+                                                echo '<option value='.$value.' selected>'.$key.'</option>';
+                                            } else {
+                                                echo '<option value='.$value.'>'.$key.'</option>';
+                                            }
+
+                                        }
+                                        echo '</select>'; ?>
+                                    </label>
+                                </div>
                             </li>
                             <br class="clear"/>
 
@@ -1228,7 +1284,11 @@ class R012Professionista{
                         if($terms) {
                         foreach ( $terms as $term ) {
                             echo $term->name;
-                        } ?></span> | <span class="ordine-num"><?php echo get_post_meta( $postid, 'r012_numero_saved', true);?></span>
+                        } ?></span>
+                        <?php if(get_post_meta( $postid, 'r012_provincia_ordine_saved', true)==0){}else{ ?>
+                            | <span class="ordine-num"><?php echo get_post_meta( $postid, 'r012_provincia_ordine_saved', true);?></span>
+                        <?php } ?>
+                        | <span class="ordine-num"><?php echo get_post_meta( $postid, 'r012_numero_saved', true);?></span>
                 <?php } ?>
             </li>
 
@@ -1248,13 +1308,12 @@ class R012Professionista{
                 <?php if(get_post_meta( $postid, 'r012_posizione_saved', true)) { ?>
                     posizione <strong><?php echo get_post_meta( $postid, 'r012_posizione_saved', true);?></strong>
                 <?php } ?>
-
             </li>
-            <li>
-                <?php if(get_post_meta( $postid, 'r012_citta_saved', true)) { ?>
+            <!--<li>
+                <?php /* if(get_post_meta( $postid, 'r012_citta_saved', true)) { ?>
                     città <strong><?php echo get_post_meta( $postid, 'r012_citta_saved', true); ?></strong>
-                <?php } ?>
-            </li>
+                <?php } */?>
+            </li>-->
             <li>
                 <?php if(get_post_meta( $postid, 'r012_sito_saved', true)) { ?>
                     sito <a href="http://<?php echo get_post_meta($postid,'r012_sito_saved',true); ?>" target="_blank"><strong><?php echo get_post_meta($postid,'r012_sito_saved',true); ?></strong></a>
@@ -1309,6 +1368,18 @@ class R012Professionista{
                         provincia <strong><?php echo get_post_meta($postid,'r012_provincia_saved',true); ?></strong>
                     <?php } ?>
 
+                    <?php if( get_post_meta($postid,'r012_regione_saved',true)) { ?>
+                        regione <strong>
+                            <?php $r012_value_regione = get_post_meta( $postid, 'r012_regione_saved', true);
+                                global $regioni;
+
+                                        foreach ($regioni as $key => $value) {
+                                            if($value == $r012_value_regione){
+                                            echo $key;
+                                            }
+                                    }
+                           } ?>
+                        </strong>
                 </li>
 
                 <li>
@@ -1621,7 +1692,6 @@ class R012Professionista{
                 <div class="content">
                     <div class="busyness-card">
                         <?php
-
                         //stampo l'array nella forma professione->professionisti
                         R012Professionista::r012_print_collaborazioni($results);
                         ?>

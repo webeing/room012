@@ -133,6 +133,9 @@
   .carousel-caption {
     position: static;
   }
+  body #wpcf7-f2149-p2148-o1{
+  	max-width: 100%;
+  }
 }
 
 @media (max-width: 767px) {
